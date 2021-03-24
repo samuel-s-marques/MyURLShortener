@@ -1,0 +1,45 @@
+<h3>MyURLShortener</h3>
+<hr>
+
+<form action="/" method="post">
+	<div class="input-group form-label-group in-border mt-4">
+		<input type="url" name="url" id="tt9" class="form-control form-control-lg shadow-none" placeholder="Paste a long url and shorten it">
+		<label for="tt9" class="form-control-lg">Paste long url and shorten it</label>
+		<button type="submit" class="btn btn-outline-primary">Shorten</button>
+	</div>
+</form>
+
+{{#if url}}
+	<div class="row mt-4">
+		<div class="col-sm-6">
+			<label for="generated_url" class="form-label mt-4">Your new URL:</label>
+			<div class="input-group mb-3">
+				<input type="text" id="shortened_url" readonly class="form-control" value="{{url}}{{code}}">
+				<button type="button" class="btn btn-outline-primary" onclick="copyUrl(1)">Copy</button>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<label for="generated_url" class="form-label mt-4">Your new URL stats:</label>
+			<div class="input-group mb-3">
+				<input type="text" id="shortened_stats_url" readonly class="form-control" value="{{url}}stats/{{code}}">
+				<button type="button" class="btn btn-outline-primary" onclick="copyUrl(2)">Copy</button>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function copyUrl(variable) {
+			if (variable == 1) {
+				var copyText = document.getElementById('shortened_url')
+			} else {
+				var copyText = document.getElementById('shortened_stats_url')
+			}
+
+			copyText.select()
+			copyText.setSelectionRange(0, 99999)
+
+			document.execCommand('copy')
+		}
+	</script>
+{{else}}
+{{/if}}

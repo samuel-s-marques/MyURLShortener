@@ -1,0 +1,259 @@
+{{#section 'head'}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+{{/section}}
+
+<div class="card mt-4">
+	<div class="card-body">
+		<div class="card-title">
+			<p style="text-align: left;">
+				{{data.title}}
+
+				<span style="float: right;">
+					<span class="badge bg-secondary">{{#formatDate data.date}}{{/formatDate}}</span>
+				</span>
+			</p>
+		</div>
+		<h6 class="card-subtitle mb-2 text-muted">{{data.url}}</h6>
+		<hr>
+		<p style="text-align: left;">
+			<a href="{{data.shortened_url}}" class="card-link">{{data.shortened_url}}</a>
+
+			<span style="float: right;">
+				<button type="button" class="btn btn-primary" style="pointer-events: none;">
+					Clicks <span class="badge bg-secondary">{{data.visits}}</span>
+				</button>
+			</span>
+		</p>
+	</div>
+</div>
+
+<div class="card mt-4">
+	<div class="card-header">
+		{{data.visits}} clicks
+	</div>
+
+	<div class="card-body">
+		<canvas id="clicks_chart" width="350" height="100"></canvas>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">
+				Language clicks
+			</div>
+
+			<div class="card-body">
+				<canvas id="language_clicks_chart" width="350" height="100"></canvas>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">
+				Device clicks
+			</div>
+
+			<div class="card-body">
+				<canvas id="device_clicks_chart" width="350" height="100"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-4">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">
+				System (OS) clicks
+			</div>
+
+			<div class="card-body">
+				<canvas id="system_clicks_chart" width="350" height="100"></canvas>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">
+				Browser clicks
+			</div>
+
+			<div class="card-body">
+				<canvas id="browser_clicks_chart" width="350" height="100"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card mt-4">
+	<div class="card-header">
+		Geo Location clicks
+	</div>
+
+	<div class="card-body">
+		<canvas id="geolocation_clicks_chart" width="350" height="100"></canvas>
+	</div>
+</div>
+<div class="push"></div>
+
+<script type="text/javascript">
+	var cc = document.getElementById('clicks_chart').getContext('2d')
+	var dcc = document.getElementById('device_clicks_chart').getContext('2d')
+	var socc = document.getElementById('system_clicks_chart').getContext('2d')
+	var bcc = document.getElementById('browser_clicks_chart').getContext('2d')
+	var lcc = document.getElementById('language_clicks_chart').getContext('2d')
+	var gcc = document.getElementById('geolocation_clicks_chart').getContext('2d')
+
+	var dynamicColors = (array) => {
+		colors = []
+
+		for (var i in array) {
+			var r = Math.floor(Math.random() * 255)
+			var g = Math.floor(Math.random() * 255)
+			var b = Math.floor(Math.random() * 255)
+
+			colors.push('rgb(' + r + ', ' + g + ', ' + b + ')')
+		}
+
+		return colors
+	}
+
+	// Click chart
+	var clicks_chart = new Chart(cc, {
+		type: 'line',
+		data: {
+			labels: {{{json data.accessed_at_label}}},
+			datasets: [{
+				label: '# of clics',
+				data: {{{json data.accessed_at_data}}},
+				backgroundColor: [
+					dynamicColors({{{json data.accessed_at_data}}})
+				]
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+
+	// Device clicks chart
+	var device_clicks_chart = new Chart(dcc, {
+		type: 'doughnut',
+		data: {
+			labels: {{{json data.device_label}}},
+			datasets: [{
+				label: 'Device clicks',
+				data: {{{json data.device_data}}},
+				backgroundColor: dynamicColors({{{json data.device_data}}}),
+				spanGaps: true
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+
+	// System (OS) clicks chart
+	var system_clicks_chart = new Chart(socc, {
+		type: 'bar',
+		data: {
+			labels: {{{json data.system_label}}},
+			datasets: [{
+				label: '# of OS',
+				data: {{{json data.system_data}}},
+				backgroundColor: dynamicColors({{{json data.system_data}}})
+			}]			
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+
+	// Browser clicks chart
+	var browser_clicks_chart = new Chart(bcc, {
+		type: 'bar',
+		data: {
+			labels: {{{json data.browser_label}}},
+			datasets: [{
+				label: '# of Browsers',
+				data: {{{json data.browser_data}}},
+				backgroundColor: dynamicColors({{{json data.browser_data}}})
+			}]			
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+
+	// Language clicks chart
+	var language_clicks_chart = new Chart(lcc, {
+		type: 'doughnut',
+		data: {
+			labels: {{{json data.language_label}}},
+			datasets: [{
+				label: 'Language clicks',
+				data: {{{json data.language_data}}},
+				backgroundColor: dynamicColors({{{json data.language_data}}})
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+
+	// Geolocation clicks chart
+	var geolocation_clicks_chart = new Chart(gcc, {
+		type: 'bar',
+		data: {
+			labels: {{{json data.geolocation_label}}},
+			datasets: [{
+				label: '# of Locations',
+				data: {{{json data.geolocation_data}}},
+				backgroundColor: dynamicColors({{{json data.geolocation_data}}})
+			}]			
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
+		}
+	})
+</script>
