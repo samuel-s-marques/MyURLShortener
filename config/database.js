@@ -13,7 +13,7 @@ client.on('error', (error) => {
 var mysql_connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: '',
+	password: process.env.MYSQL_PASSWORD,
 	database: 'URLShortener',
 	charset: 'utf8'
 })
