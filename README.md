@@ -8,11 +8,9 @@
 
 ## Screenshots
 - Home page
-- ![screenshot1](https://i.imgur.com/Zvi5RRy.png)
-- ![screenshot2](https://i.imgur.com/2h0Wa6g.png)
-
+- ![screenshot1](https://i.imgur.com/kSJxL3c.png)
 - Stats page
-- ![screenshot3](https://i.imgur.com/ATURuzO.png)
+- ![screenshot3](https://i.imgur.com/86kJLci.png)
 
 ## Setup
 You need to have [Node.js](https://nodejs.org/en/), [MySQL](https://www.mysql.com/) and [Redis](https://redis.io/) installed.
